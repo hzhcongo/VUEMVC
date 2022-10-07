@@ -29,7 +29,7 @@ public class MyStepdefs {
 
     @After
     public void teardown() {
-        driver.quit();
+//        driver.quit();
     }
 
     @Given("I am on the todo list page")
@@ -77,11 +77,11 @@ public class MyStepdefs {
         }
     }
 
-    @And("I have added 1 todo item")
+    @And("I have added 'apple' todo item")
     public void iHaveAddedTodoItem() {
         iSeeAnInputField();
         iSelectTheInputField();
-        iEnterTodoItem("fruits");
+        iEnterTodoItem("apple");
         iPressEnter();
         iShouldSeeNewThingAddedAsTodo();
     }
@@ -101,6 +101,31 @@ public class MyStepdefs {
     public void iSeeTheTodoItemDeleted() throws AssertionError{
         if (driver.findElements(By.cssSelector(".todo label")).size() > 0) {
             throw new AssertionError("Todo item is not deleted");
+        }
+    }
+
+    @When("I double-click on the todo item")
+    public void iDoubleClickOnTheTodoItem() {
+        Actions act = new Actions(driver);
+        act.doubleClick(todoItem).perform();
+    }
+
+    @And("I edit the todo item to 'orange'")
+    public void iEditTheTodoItemToOrange() {
+        WebElement editInputField = driver.findElement(By.cssSelector(".todo .edit"));
+
+        // To clear todo item
+        while (editInputField.getAttribute("value").length() != 0) {
+            editInputField.sendKeys(Keys.BACK_SPACE);
+        }
+        editInputField.sendKeys("orange");
+        editInputField.sendKeys(Keys.ENTER);
+    }
+
+    @Then("I see the todo item updated to 'orange'")
+    public void iSeeTheTodoItemUpdatedToOrange() throws AssertionError {
+        if (!driver.findElement(By.cssSelector(".todo label")).getText().equals("orange")) {
+            throw new AssertionError( "Todo item is updated wrongly");
         }
     }
 }

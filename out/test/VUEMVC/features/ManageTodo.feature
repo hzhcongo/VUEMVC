@@ -21,9 +21,16 @@ Feature: Manage todo
 
   Scenario: Delete single todo item
     Given I am on the todo list page
-    And I have added 1 todo item
+    And I have added 'apple' todo item
     When I hover over the added todo item to click on X icon
     Then I see the todo item deleted
+
+  Scenario: Edit todo item
+    Given I am on the todo list page
+    And I have added 'apple' todo item
+    When I double-click on the todo item
+    And I edit the todo item to 'orange'
+    Then I see the todo item updated to 'orange'
 
 #  Scenario: Bulk delete multiple todo items
 #    Given I am on the todo list page
