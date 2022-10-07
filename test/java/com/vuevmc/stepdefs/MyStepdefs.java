@@ -12,13 +12,14 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
 public class MyStepdefs {
     public WebDriver driver;
     public WebElement inputField;
     public WebElement todoItem;
     public String todoItemToInput;
-
+    public WebElement deleteIcon;
 
     @Before
     public void setup() {
@@ -37,7 +38,7 @@ public class MyStepdefs {
     }
 
     @And("I see an input field")
-    public void iSeeAnInputField() {
+    public void iSeeAnInputField() throws AssertionError {
         inputField = driver.findElement(By.cssSelector(".new-todo"));
 
         if(!inputField.isDisplayed()) {
@@ -62,7 +63,7 @@ public class MyStepdefs {
     }
 
     @Then("I should see new todo item added")
-    public void iShouldSeeNewThingAddedAsTodo() {
+    public void iShouldSeeNewThingAddedAsTodo() throws AssertionError {
         todoItem = driver.findElement(By.cssSelector(".todo label"));
         if (!todoItem.getText().equals(todoItemToInput)) {
             throw new AssertionError("Added todo item is incorrect");
@@ -70,9 +71,36 @@ public class MyStepdefs {
     }
 
     @And("I should see input field being empty")
-    public void iShouldSeeInputFieldBeingEmpty() {
+    public void iShouldSeeInputFieldBeingEmpty() throws AssertionError {
         if(!inputField.getAttribute("value").equals("")) {
             throw new AssertionError("Input field is not empty.");
+        }
+    }
+
+    @And("I have added 1 todo item")
+    public void iHaveAddedTodoItem() {
+        iSeeAnInputField();
+        iSelectTheInputField();
+        iEnterTodoItem("fruits");
+        iPressEnter();
+        iShouldSeeNewThingAddedAsTodo();
+    }
+
+    @When("I hover over the added todo item to click on X icon")
+    public void iHoverOverTheAddedTodoItemToClickOnXIcon() throws AssertionError{
+        todoItem = driver.findElement(By.cssSelector(".todo label"));
+
+        Actions action = new Actions(driver);
+        action.moveToElement(todoItem).perform();
+
+        deleteIcon = driver.findElement(By.cssSelector(".destroy"));
+        deleteIcon.click();
+    }
+
+    @Then("I see the todo item deleted")
+    public void iSeeTheTodoItemDeleted() throws AssertionError{
+        if (driver.findElements(By.cssSelector(".todo label")).size() > 0) {
+            throw new AssertionError("Todo item is not deleted");
         }
     }
 }
