@@ -20,6 +20,7 @@ public class MyStepdefs {
     public WebElement todoItem;
     public String todoItemToInput;
     public WebElement deleteIcon;
+    public WebElement selectionToggler;
 
     @Before
     public void setup() {
@@ -29,7 +30,7 @@ public class MyStepdefs {
 
     @After
     public void teardown() {
-//        driver.quit();
+        driver.quit();
     }
 
     @Given("I am on the todo list page")
@@ -77,11 +78,11 @@ public class MyStepdefs {
         }
     }
 
-    @And("I have added 'apple' todo item")
-    public void iHaveAddedTodoItem() {
+    @And("I have added {string} todo item")
+    public void iHaveAddedTodoItem(String item) {
         iSeeAnInputField();
         iSelectTheInputField();
-        iEnterTodoItem("apple");
+        iEnterTodoItem(item);
         iPressEnter();
         iShouldSeeNewThingAddedAsTodo();
     }
@@ -110,22 +111,83 @@ public class MyStepdefs {
         act.doubleClick(todoItem).perform();
     }
 
-    @And("I edit the todo item to 'orange'")
-    public void iEditTheTodoItemToOrange() {
+    @And("I edit the todo item to {string}")
+    public void iEditTheTodoItemToNewItem(String newItem) {
         WebElement editInputField = driver.findElement(By.cssSelector(".todo .edit"));
 
         // To clear todo item
         while (editInputField.getAttribute("value").length() != 0) {
             editInputField.sendKeys(Keys.BACK_SPACE);
         }
-        editInputField.sendKeys("orange");
+        editInputField.sendKeys(newItem);
         editInputField.sendKeys(Keys.ENTER);
     }
 
-    @Then("I see the todo item updated to 'orange'")
-    public void iSeeTheTodoItemUpdatedToOrange() throws AssertionError {
-        if (!driver.findElement(By.cssSelector(".todo label")).getText().equals("orange")) {
+    @Then("I see the todo item updated to {string}")
+    public void iSeeTheTodoItemUpdatedToOrange(String newItem) throws AssertionError {
+        if (!driver.findElement(By.cssSelector(".todo label")).getText().equals(newItem)) {
             throw new AssertionError( "Todo item is updated wrongly");
+        }
+    }
+
+    @And("I have added {int} todo items")
+    public void iHaveAddedTodoItems(int count) {
+        while (count != 0) {
+            iHaveAddedTodoItem("apple");
+            count--;
+        }
+    }
+
+    @When("I select button at left of input field")
+    public void iSelectButtonAtLeftOfInputField() {
+        selectionToggler = driver.findElement(By.cssSelector("label[for=toggle-all]"));
+        selectionToggler.click();
+    }
+
+    @Then("I see all todo items are marked completed")
+    public void iSeeAllTodoItemsAreMarkedCompleted() throws AssertionError {
+        if (driver.findElements(By.cssSelector(".todo.completed")).size() != 2) {
+            throw new AssertionError("All todo items are not marked completed");
+        }
+    }
+
+    @And("I have {int} todo items complete")
+    public void iHaveTodoItemsComplete(int count) {
+        iHaveAddedTodoItems(count);
+        iSelectButtonAtLeftOfInputField();
+        iSeeAllTodoItemsAreMarkedCompleted();
+    }
+
+    @Then("I see all todo items are not marked completed")
+    public void iSeeAllTodoItemsAreNotMarkedCompleted() throws AssertionError {
+        if (driver.findElements(By.cssSelector(".todo.completed")).size() != 0) {
+            throw new AssertionError("All todo items are not marked completed");
+        }
+    }
+
+    @When("I select checkbox at left of todo item")
+    public void iSelectCheckboxAtLeftOfTodoItem() {
+        driver.findElement(By.cssSelector(".view .toggle")).click();
+    }
+
+    @Then("I see todo item is marked completed")
+    public void iSeeTodoItemIsMarkedCompleted() {
+        if (driver.findElements(By.cssSelector(".todo.completed")).size() != 1) {
+            throw new AssertionError("Todo item is not marked completed");
+        }
+    }
+
+    @And("I have {string} todo item as completed")
+    public void iHaveTodoItemAsCompleted(String item) {
+        iHaveAddedTodoItem(item);
+        iSelectCheckboxAtLeftOfTodoItem();
+        iSeeTodoItemIsMarkedCompleted();
+    }
+
+    @Then("I see todo item is marked active")
+    public void iSeeTodoItemIsMarkedActive() {
+        if (driver.findElements(By.cssSelector(".todo.completed")).size() != 0) {
+            throw new AssertionError("Todo item is not marked active");
         }
     }
 }
