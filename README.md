@@ -28,6 +28,8 @@ Page loaded
 
 - Delete
 
+- Edit
+
 - Check
 
 - Uncheck

@@ -1,8 +1,8 @@
 <component name="libraryTable">
-  <library name="io.cucumber.java8" type="repository">
-    <properties maven-id="io.cucumber:cucumber-java8:6.1.1" />
+  <library name="io.cucumber.java" type="repository">
+    <properties maven-id="io.cucumber:cucumber-java:6.1.1" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/cucumber-java8/6.1.1/cucumber-java8-6.1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/cucumber-java/6.1.1/cucumber-java-6.1.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/cucumber-core/6.1.1/cucumber-core-6.1.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/cucumber-gherkin/6.1.1/cucumber-gherkin-6.1.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/cucumber-gherkin-messages/6.1.1/cucumber-gherkin-messages-6.1.1.jar!/" />
@@ -14,7 +14,6 @@
       <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/docstring/6.1.1/docstring-6.1.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/io/cucumber/html-formatter/6.0.3/html-formatter-6.0.3.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/net/jodah/typetools/0.6.2/typetools-0.6.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
